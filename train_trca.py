@@ -27,6 +27,9 @@ def train_trca(eeg_dat,fs,num_filt):
         for fb_i in range(num_filt):
             eeg_tmp = filterbank(eeg_tmp,fs,fb_i)
             traindata[targ_i,fb_i,:,:] = np.squeeze(np.mean(eeg_tmp, axis=2))
-            w_temp = trca(eeg_tmp)
-            w[targ_i,fb_i,:] = w_temp[:,0]
+            # w_temp = trca(eeg_tmp)[:,0]
+            # max_idx = np.argmax(np.abs(w_temp))
+            # factor = 1/w_temp[max_idx]
+            # w[targ_i,fb_i,:] = w_temp*factor
+            w[targ_i,fb_i,:] = trca(eeg_tmp)[:,0]
     return {'traindata':traindata,'w':w,'fs':fs,'num_targ':num_targets,'num_filt':num_filt}

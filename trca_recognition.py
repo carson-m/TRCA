@@ -23,7 +23,7 @@ def trca_recognition(eeg_dat,model,is_ensemble):
                 eeg_vec = np.dot(np.transpose(eeg_filtered),w)
                 traindat_vec = np.dot(np.transpose(train_data),w)
                 r_temp = np.corrcoef(eeg_vec.flatten('F'),traindat_vec.flatten('F'))
-                r_square[fb_idx,class_idx] = r_temp[0,1]**2
+                r_square[fb_idx,class_idx] = r_temp[0,1]
         rho = np.dot(fb_coeffs,r_square)
         result[target_idx] = np.argmax(rho)+1
     return result
@@ -77,7 +77,7 @@ def __main__():
     mean_itr,sigma_itr = sp.stats.norm.fit(itrs)
     confidence_intv = sp.stats.norm.interval(0.95,loc=mean_itr,scale=sigma_itr)
     print('Mean ITR = %.4f bits/min (95%% CI: %.4f - %.4f bits/min)' % (mean_itr,confidence_intv[0],confidence_intv[1]))
-        
+    
     
 if __name__ == '__main__':
     __main__()

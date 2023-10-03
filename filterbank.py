@@ -11,14 +11,5 @@ def filterbank(eeg_data,fs,filt_idx):
     N, Wn = signal.cheb1ord(Wp, Ws, 3, 40)
     B, A = signal.cheby1(N, 0.5, Wn,'bandpass')
     
-    y = np.zeros(eeg_data.shape)
-    if len(eeg_data.shape) == 2:
-        num_chans, __ = eeg_data.shape
-        for channel_idx in range(num_chans):
-            y[channel_idx,:] = signal.filtfilt(B, A, eeg_data[channel_idx,:])
-    else:
-        num_chans, __, num_trials = eeg_data.shape
-        for trial_idx in range(num_trials):
-            for channel_idx in range(num_chans):
-                y[channel_idx,:,trial_idx] = signal.filtfilt(B, A, eeg_data[channel_idx,:,trial_idx])
+    y = signal.filtfilt(B, A, eeg_data, axis=1, padlen=3*(max(len(B),len(A))-1))
     return y
